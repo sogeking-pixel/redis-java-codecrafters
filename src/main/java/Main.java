@@ -1,4 +1,6 @@
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -10,14 +12,23 @@ public class Main {
     //  Uncomment this block to pass the first stage
         ServerSocket serverSocket = null;
         Socket clientSocket = null;
-        int port = 6379;
+        int port = 6380;
+        var host = "192.168.1.37";
+        var inetSocketAddress = new InetSocketAddress(port);
         try {
-          serverSocket = new ServerSocket(port);
+          serverSocket = new ServerSocket();
+          serverSocket.bind(inetSocketAddress);
           // Since the tester restarts your program quite often, setting SO_REUSEADDR
           // ensures that we don't run into 'Address already in use' errors
           serverSocket.setReuseAddress(true);
           // Wait for connection from client.
           clientSocket = serverSocket.accept();
+
+          OutputStream out = clientSocket.getOutputStream();
+          out.write("+PONG\r\n".getBytes());
+          out.flush();
+          out.close();
+
         } catch (IOException e) {
           System.out.println("IOException: " + e.getMessage());
         } finally {
