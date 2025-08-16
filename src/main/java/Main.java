@@ -12,7 +12,7 @@ public class Main {
     //  Uncomment this block to pass the first stage
         ServerSocket serverSocket = null;
         Socket clientSocket = null;
-        int port = 6380;
+        int port = 6379;
         var host = "192.168.1.37";
         var inetSocketAddress = new InetSocketAddress(port);
         try {
