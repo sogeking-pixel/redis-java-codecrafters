@@ -16,9 +16,9 @@ public class ServerTcp {
     public void start() throws Exception {
         this.serverSocket = new ServerSocket();
         this.serverSocket.bind(this.inetSocketAddress);
-        var clientSocket = serverSocket.accept();
-        while (true) {
 
+        while (true) {
+            var clientSocket = serverSocket.accept();
             System.out.println("Client connected: "+ clientSocket.getInetAddress());
 
             this.handleClient(clientSocket);
@@ -42,7 +42,9 @@ public class ServerTcp {
         String command = parts[0];
 
         String argument = (parts.length > 1 ? parts[1] : "").trim();
-        this.sendResponse("", clientSocket);
+        var response = this.commandPing ("");
+        this.sendResponse(response, clientSocket);
+
 //        switch (command.toUpperCase()) {
 //            case "PING" -> {
 //                var response = this.commandPing (argument);
