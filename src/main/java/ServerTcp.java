@@ -16,9 +16,9 @@ public class ServerTcp {
     public void start() throws Exception {
         this.serverSocket = new ServerSocket();
         this.serverSocket.bind(this.inetSocketAddress);
-
+        var clientSocket = serverSocket.accept();
         while (true) {
-            var clientSocket = serverSocket.accept();
+
             System.out.println("Client connected: "+ clientSocket.getInetAddress());
 
             this.handleClient(clientSocket);
@@ -52,7 +52,7 @@ public class ServerTcp {
                 clientSocket.close();
                 this.stop();
             }
-            default -> {}
+            default -> { this.sendResponse("", clientSocket);}
         };
 
 
