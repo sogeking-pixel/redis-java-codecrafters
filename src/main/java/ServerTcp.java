@@ -36,7 +36,7 @@ public class ServerTcp {
         int bytesRead = in.read(buffer);
 
 
-        var stringInput = new String(buffer, 0, bytesRead);
+        var stringInput = new String(buffer, 0, bytesRead).trim();
 
         String[] parts = stringInput.split("\r\n", 2);
         String command = parts[0];
@@ -67,7 +67,7 @@ public class ServerTcp {
 
     private String commandPing(String argument){
         if (argument.isEmpty()) return "+PONG\r\n";
-        return argument;
+        return argument+"\r\n";
     }
 
 
