@@ -32,11 +32,10 @@ public class ServerTcp {
 
     private void handleClient(Socket clientSocket) throws Exception {
         byte[] buffer = new byte[1024];
-        var in = clientSocket.getInputStream();
-        int bytesRead = in.read(buffer);
+        clientSocket.getInputStream().read(buffer);
 
 
-        var stringInput = new String(buffer, 0, bytesRead).trim();
+        var stringInput = new String(buffer).trim();
 
         String[] parts = stringInput.split("\r\n", 2);
         String command = parts[0];
