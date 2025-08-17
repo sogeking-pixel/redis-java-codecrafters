@@ -37,34 +37,24 @@ public class ServerTcp {
 
         var stringInput = new String(buffer).trim();
 
-        String[] parts = stringInput.split("\r\n", 2);
+        String[] parts = stringInput.split(" ", 2);
         String command = parts[0];
-
+        System.out.println(command);
         String argument = (parts.length > 1 ? parts[1] : "").trim();
-        var response = this.commandPing ("");
-        clientSocket.getOutputStream().write(response.getBytes());;
+        System.out.println(argument);
+
+        switch (command.toUpperCase()) {
+            case "PING" -> {
+                var response = this.commandPing (argument);
+                clientSocket.getOutputStream().write(response.getBytes());;
+            }
+            default -> {
+                clientSocket.close();
+                this.stop();
+            }
+        };
 
 
-//        switch (command.toUpperCase()) {
-//            case "PING" -> {
-//                var response = this.commandPing (argument);
-//                this.sendResponse(response, clientSocket);
-//            }
-//            case "QUIT" -> {
-//                clientSocket.close();
-//                this.stop();
-//            }
-//            default -> { this.sendResponse("", clientSocket);}
-//        };
-
-
-    }
-
-    private void sendResponse(String response, Socket clientSocket) throws Exception {
-        var out = clientSocket.getOutputStream();
-        out.write(response.getBytes());
-        out.flush();
-        out.close();
     }
 
     private String commandPing(String argument){
