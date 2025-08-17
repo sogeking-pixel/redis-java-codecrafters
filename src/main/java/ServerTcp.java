@@ -34,25 +34,12 @@ public class ServerTcp {
         byte[] buffer = new byte[1024];
         clientSocket.getInputStream().read(buffer);
 
+        var stringInput = new String(buffer);
+        if (stringInput.isEmpty()) return;
+        if(!stringInput.contains("PING\n")) return;
 
-        var stringInput = new String(buffer).trim();
-
-        String[] parts = stringInput.split(" ", 2);
-        String command = parts[0];
-        System.out.println(command);
-        String argument = (parts.length > 1 ? parts[1] : "").trim();
-        System.out.println(argument);
-
-        switch (command.toUpperCase()) {
-            case "PING" -> {
-                var response = this.commandPing (argument);
-                clientSocket.getOutputStream().write(response.getBytes());;
-            }
-            default -> {
-                clientSocket.close();
-                this.stop();
-            }
-        };
+        var response = this.commandPing ("");
+        clientSocket.getOutputStream().write(response.getBytes());;
 
 
     }
