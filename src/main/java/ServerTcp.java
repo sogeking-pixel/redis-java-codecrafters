@@ -36,7 +36,7 @@ public class ServerTcp {
 
         var stringInput = new String(buffer);
         if (stringInput.isEmpty()) return;
-        if(!stringInput.contains("PING\n")) return;
+        if(!stringInput.contains("PING\r\n")) return;
 
         var response = this.commandPing ("");
         clientSocket.getOutputStream().write(response.getBytes());;
