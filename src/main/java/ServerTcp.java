@@ -42,18 +42,18 @@ public class ServerTcp {
         String command = parts[0];
 
         String argument = (parts.length > 1 ? parts[1] : "").trim();
-
-        switch (command.toUpperCase()) {
-            case "PING" -> {
-                var response = this.commandPing (argument);
-                this.sendResponse(response, clientSocket);
-            }
-            case "QUIT" -> {
-                clientSocket.close();
-                this.stop();
-            }
-            default -> { this.sendResponse("", clientSocket);}
-        };
+        this.sendResponse("", clientSocket);
+//        switch (command.toUpperCase()) {
+//            case "PING" -> {
+//                var response = this.commandPing (argument);
+//                this.sendResponse(response, clientSocket);
+//            }
+//            case "QUIT" -> {
+//                clientSocket.close();
+//                this.stop();
+//            }
+//            default -> { this.sendResponse("", clientSocket);}
+//        };
 
 
     }
