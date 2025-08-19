@@ -1,10 +1,13 @@
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ServerTcp {
     private InetSocketAddress inetSocketAddress = null;
     private ServerSocket serverSocket;
+    private final ExecutorService threadPool = Executors.newFixedThreadPool(100);;
 
     public ServerTcp(String host, int port) {
         this.inetSocketAddress = new InetSocketAddress(host, port);
@@ -16,12 +19,9 @@ public class ServerTcp {
     public void start() throws Exception {
         this.serverSocket = new ServerSocket();
         this.serverSocket.bind(this.inetSocketAddress);
-        var clientSocket = serverSocket.accept();
-        while (true) {
-
-            System.out.println("Client connected: "+ clientSocket.getInetAddress());
-
-            this.handleClient(clientSocket);
+        while(true){
+            var clientSocket = serverSocket.accept();
+            threadPool.submit(new ClienteHandler(clientSocket));
         }
 
     }
@@ -29,26 +29,6 @@ public class ServerTcp {
     public void stop() throws Exception {
         serverSocket.close();
     }
-
-    private void handleClient(Socket clientSocket) throws Exception {
-        byte[] buffer = new byte[1024];
-        clientSocket.getInputStream().read(buffer);
-
-        var stringInput = new String(buffer);
-        if (stringInput.isEmpty()) return;
-        if(!stringInput.contains("PING\r\n")) return;
-
-        var response = this.commandPing ("");
-        clientSocket.getOutputStream().write(response.getBytes());;
-
-
-    }
-
-    private String commandPing(String argument){
-        if (argument.isEmpty()) return "+PONG\r\n";
-        return argument+"\r\n";
-    }
-
 
 
 }
